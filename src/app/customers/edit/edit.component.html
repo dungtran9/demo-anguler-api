@@ -1,0 +1,14 @@
+<h2>add new customer</h2>
+<div class="form-group">
+  <form [formGroup]="editForm" (ngSubmit)="update()">
+    <label>name:</label>
+    <input type="text" formControlName="name"><br>
+    <label>phone:</label>
+    <input type="text" formControlName="phone"><br>
+    <label>email:</label>
+    <input type="text" formControlName="email"><br>
+    <button type="submit" class="btn btn-primary">Submit</button>
+    <a [routerLink]="['list']" class="btn btn-info ml-2">Cancel</a>
+  </form>
+</div>
+
