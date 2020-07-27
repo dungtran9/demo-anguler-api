@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup} from "@angular/forms";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ICustomer} from "../../customer";
 import {CustomerService} from "../../customer.service";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -10,7 +10,7 @@ import {ActivatedRoute, Router} from "@angular/router";
   styleUrls: ['./add.component.css']
 })
 export class AddComponent implements OnInit {
-  customer: ICustomer[]=[];
+  customer: ICustomer[] = [];
   addForm: FormGroup;
 
   constructor(private router: Router,
@@ -20,18 +20,32 @@ export class AddComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.addForm=this.fb.group({
-      name : [''],
-      phone : [''],
-      email : [''],
+    this.addForm = this.fb.group({
+      name: ['',[Validators.required]],
+      phone: ['',[Validators.required,Validators.minLength(10),Validators.maxLength(12)]],
+      email: ['',[Validators.required,Validators.email]],
     })
   }
-store(){
+ get name(){
+    return this.addForm.get('name')
+ }
+  get phone(){
+    return this.addForm.get('phone')
+  }
+  get email(){
+    return this.addForm.get('email')
+  }
+  store() {
     let customer = this.addForm.value;
-    this.customerService.add(customer).subscribe(res =>{
+    this.customerService.add(customer).subscribe(res => {
       console.log(res)
       this.router.navigate(['list'])
 
     });
-}
+  }
+
+  viewList() {
+    this.router.navigate(['list'])
+
+  }
 }

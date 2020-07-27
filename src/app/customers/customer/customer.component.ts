@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {ICustomer} from "../../customer";
-import {FormControl} from "@angular/forms";
+import {FormBuilder, FormControl} from "@angular/forms";
 import {CustomerService} from "../../customer.service";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-customer',
@@ -9,26 +10,43 @@ import {CustomerService} from "../../customer.service";
   styleUrls: ['./customer.component.css']
 })
 export class CustomerComponent implements OnInit {
+  title = 'Customer List';
   customersList: ICustomer[] = [];
-  inputControl = new FormControl();
 
-  constructor(private customerService: CustomerService) {
+  constructor(private router: Router,
+              private route: ActivatedRoute,
+              private customerService: CustomerService,
+              private fb: FormBuilder) {
   }
 
   ngOnInit() {
     this.customerService.getAll().subscribe(respone => {
       this.customersList = respone;
-    },error => {
+      this.customerListSearch = this.customersList;
+    }, error => {
       console.log(error)
-    },()=>{
+    }, () => {
       console.log('complete')
     })
   }
-  delete(i){
+  customerListSearch = [];
+  delete(i) {
     const customer = this.customersList[i];
-    this.customerService.delete(customer.id).subscribe(res=>{
-      this.customersList=this.customersList.filter(cus => cus.id !== customer.id)
+    this.customerService.delete(customer.id).subscribe(res => {
+      this.customerListSearch = this.customerListSearch.filter(cus => cus.id !== customer.id)
+      this.router.navigate(['list'])
     })
   }
 
+  search(event: any) {
+    let keyword = event.target.value.toLowerCase();
+    this.customerListSearch = keyword ? this.customerFilter(keyword) : this.customersList;
+    console.log(this.customerListSearch)
+  }
+
+  customerFilter(keyword: string) {
+    return this.customersList.filter(customer => {
+      return customer.name.toLowerCase().indexOf(keyword) != -1;
+    });
+  }
 }

@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ICustomer} from "../../customer";
-import {FormBuilder, FormGroup} from "@angular/forms";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {CustomerService} from "../../customer.service";
 
@@ -18,14 +18,15 @@ export class EditComponent implements OnInit {
               private fb: FormBuilder,
               private router: Router) {
   }
-   id = +this.route.snapshot.paramMap.get('id');
+
+  id = +this.route.snapshot.paramMap.get('id');
+
   ngOnInit(): void {
     this.editForm = this.fb.group({
-      name: [''],
-      phone: [''],
-      email: [''],
+      name: ['',[Validators.required]],
+      phone: ['',[Validators.required,Validators.minLength(10),Validators.maxLength(12)]],
+      email: ['',[Validators.required,Validators.email]],
     })
-
     this.customerService.getCustomerById(this.id).subscribe(
       res => {
         this.customer = res;
@@ -37,14 +38,25 @@ export class EditComponent implements OnInit {
       }
     );
   };
-
+  get name(){
+    return this.editForm.get('name')
+  }
+  get phone(){
+    return this.editForm.get('phone')
+  }
+  get email(){
+    return this.editForm.get('email')
+  }
   update() {
     let customer = this.editForm.value;
-    this.customerService.update(customer,this.id).subscribe(res => {
+    this.customerService.update(customer, this.id).subscribe(res => {
       console.log(res)
       this.router.navigate(['list'])
     })
   };
 
+  viewList() {
+    this.router.navigate(['list'])
 
+  }
 }

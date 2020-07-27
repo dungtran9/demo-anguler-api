@@ -1,25 +1,39 @@
-<h2>Customer List</h2>
-<div class="card-body">
-<button routerLink="add" class="btn btn-success">ADD new customer</button>
-<table class="table table">
-  <thead class="thead-dark">
-  <tr>
-    <th scope="col">STT</th>
-    <th scope="col">name</th>
-    <th scope="col">phone</th>
-    <th scope="col">email</th>
-    <th scope="col"></th>
-    <th scope="col"></th>
-  </tr>
-    </thead>
-  <tr *ngFor="let customer of customersList; index as i">
-    <td >{{i+1}}</td>
-    <td>{{customer.name}}</td>
-    <td>{{customer.phone}}</td>
-    <td>{{customer.email}}</td>
-    <td><a [routerLink]="['/edit',customer.id]" class="btn btn-primary">Update</a></td>
-    <td><a [routerLink]="['/delete',customer.id]" class="btn btn-danger" (click)="delete(i)">delete</a></td>
-  </tr>
-</table>
-</div>
+<div class="col-12 col-md-12">
+  <div>
+    <button routerLink="add" class="btn btn-success">ADD new customer</button>
+  </div>
+  <div class="pt-3">
+    <div class="card">
+      <div class="card-header">
+        {{title}}
+      </div>
+      <div class="card-body">
+        <table class="table table">
+          <thead class="thead-dark">
+          <tr>
+            <th scope="col">STT</th>
+            <th scope="col">name</th>
+            <th scope="col">phone</th>
+            <th scope="col">email</th>
+            <th scope="col">
+              <input type="text" (keyup)="search($event)" class="form-control" placeholder="search">
+            </th>
 
+          </tr>
+          </thead>
+          <tr *ngFor="let customer of customerListSearch; index as i">
+            <td>{{i + 1}}</td>
+            <td>{{customer.name}}</td>
+            <td>{{customer.phone}}</td>
+            <td>{{customer.email}}</td>
+            <td><a [routerLink]="['/edit',customer.id]" class="btn btn-primary">  <span class="glyphicon glyphicon-edit"></span></a>
+              <a [routerLink]="['/delete',customer.id]" class="btn btn-danger ml-3" (click)="delete(i)"> <span class="glyphicon glyphicon-trash"></span></a>
+            </td>
+
+          </tr>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
